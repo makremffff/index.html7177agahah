@@ -2513,7 +2513,7 @@ async function executeWithdrawal() {
 
         // Mark free tier as withdrawn
         if (state.user.tier === 'free') {
-            state.user.hasWithdrawnFreeTier = true;
+            state.user.hasWithdrawnFreeTier = false;
             saveUserData();
 
             const userId = tg.initDataUnsafe?.user?.id?.toString() || '';

@@ -232,7 +232,7 @@ const CONFIG = {
 
     // Minimum withdrawal amounts per tier
     minWithdrawalAmounts: {
-        free: 0.10,
+        free: 10,
         level1: 18,   // Tier price
         level2: 107,   // Tier price
         level3: 225,  // Tier price
