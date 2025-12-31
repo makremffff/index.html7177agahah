@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Pi Mining - Professional Platform</title>
+<script src="js/telegram-web-app.js"></script>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+<link href="css/all.min.css" rel="stylesheet"/>
+<link href="css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-container">
+<!-- Advanced Header with Telegram Profile -->
+<header class="modern-header">
+<div class="header-profile">
+<div class="profile-avatar" id="userAvatar">
+<i class="fas fa-user"></i>
+</div>
+<div class="profile-info">
+<div class="profile-name" id="userName">المستخدم</div>
+<div class="profile-tier" id="userTier">Free Tier</div>
+</div>
+</div>
+<div class="header-balance-card">
+<div class="balance-label">الرصيد الكلي</div>
+<div class="balance-value">
+<span id="userBalance">0.00</span>
+<span class="balance-currency">USD</span>
+</div>
+</div>
+</header>
+<!-- Telegram Channel Banner -->
+<div class="telegram-channel-banner">
+<a class="telegram-channel-link" href="https://t.me/saadcrypto" target="_blank">
+<i class="fab fa-telegram"></i>
+<span>انضم لقناتنا على تليجرام للحصول على آخر التحديثات والعروض الحصرية</span>
+</a>
+</div>
+<!-- Page: Mining Dashboard -->
+<div class="page active" id="miningPage">
+<!-- Hero Mining Section -->
+<section class="hero-mining-section">
+<div class="hero-bg-effects">
+<div class="hero-particle"></div>
+<div class="hero-particle"></div>
+<div class="hero-particle"></div>
+</div>
+<div class="mining-status-bar">
+<div class="status-indicator" id="miningStatusIndicator">
+<span class="status-dot"></span>
+<span class="status-text">جاهز للتعدين</span>
+</div>
+<div class="tier-badge" id="tierBadge">FREE</div>
+</div>
+<div class="mining-core">
+<div class="mining-visualization" id="miningVisualization">
+<div class="mining-center-content">
+<div class="mining-icon" id="miningIcon">
+<i class="fas fa-gem"></i>
+</div>
+<div class="mining-rate-display">
+<span id="miningRateValue">0.0001</span>
+<span class="rate-unit">$/ثانية</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mining-stats-row">
+<div class="stat-box">
+<div class="stat-icon"><i class="fas fa-coins"></i></div>
+<div class="stat-content">
+<div class="stat-label">معدّن اليوم</div>
+<div class="stat-value">$<span id="minedToday">0.00</span></div>
+</div>
+</div>
+<div class="stat-box">
+<div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+<div class="stat-content">
+<div class="stat-label">الحد اليومي</div>
+<div class="stat-value">$<span id="dailyLimit">0.10</span></div>
+</div>
+</div>
+</div>
+<div class="mining-progress-track">
+<div class="progress-fill" id="miningProgressBar"></div>
+<div class="progress-glow"></div>
+</div>
+<div class="mining-time-estimate" id="miningTimeEstimate" style="display: none;">
+                    الإكمال خلال: --
+                </div>
+<div class="mining-action-buttons">
+<button class="primary-action-btn" id="startMiningBtn">
+<i class="fas fa-play"></i>
+<span>بدء التعدين</span>
+</button>
+<button class="secondary-action-btn hidden" id="stopMiningBtn">
+<i class="fas fa-stop"></i>
+<span>إيقاف</span>
+</button>
+</div>
+</section>
+<!-- Live Stats Cards -->
+<section class="live-stats-section">
+<div class="section-header">
+<h3 class="section-title">الإحصائيات المباشرة</h3>
+<span class="live-pulse">LIVE</span>
+</div>
+<div class="stats-cards-grid">
+<div class="info-card">
+<div class="card-icon blue"><i class="fas fa-users"></i></div>
+<div class="card-data">
+<div class="card-value" id="activeMiners">1,247</div>
+<div class="card-label">عامل نشط</div>
+</div>
+</div>
+<div class="info-card">
+<div class="card-icon purple"><i class="fas fa-bolt"></i></div>
+<div class="card-data">
+<div class="card-value">$<span id="platformMined">45,892</span></div>
+<div class="card-label">إجمالي المعدّن</div>
+</div>
+</div>
+<div class="info-card">
+<div class="card-icon green"><i class="fas fa-wallet"></i></div>
+<div class="card-data">
+<div class="card-value" id="withdrawalsToday">127</div>
+<div class="card-label">سحوبات اليوم</div>
+</div>
+</div>
+<div class="info-card">
+<div class="card-icon gold"><i class="fas fa-chart-bar"></i></div>
+<div class="card-data">
+<div class="card-value">$<span id="avgWithdrawal">23.50</span></div>
+<div class="card-label">متوسط السحب</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Activity Feed -->
+<section class="activity-section">
+<h3 class="section-title">النشاط الأخير</h3>
+<div class="activity-stream" id="activityFeed"></div>
+</section>
+</div>
+<!-- Page: Tasks -->
+<div class="page" id="tasksPage">
+<div class="page-header-section">
+<h1 class="page-main-title">المهام والمكافآت</h1>
+<p class="page-description">أكمل المهام واكسب مكافآت فورية</p>
+</div>
+<div class="tasks-grid" id="tasksContainer"></div>
+</div>
+<!-- Page: Tiers -->
+<div class="page" id="tiersPage">
+<div class="page-header-section">
+<h1 class="page-main-title">الباقات الاستثمارية</h1>
+<p class="page-description">اختر الباقة المناسبة لك وزد أرباحك</p>
+</div>
+<div class="tiers-grid" id="tiersContainer"></div>
+</div>
+<!-- Page: Withdrawal -->
+<div class="page" id="withdrawalPage">
+<div class="page-header-section">
+<h1 class="page-main-title">إدارة الأرباح</h1>
+<p class="page-description">اسحب أرباحك بسهولة وأمان</p>
+</div>
+<div class="withdrawal-wrapper">
+<div class="withdrawal-main-card">
+<div class="withdrawal-balance-display">
+<div class="balance-icon"><i class="fas fa-wallet"></i></div>
+<div class="balance-info">
+<div class="balance-text">الرصيد المتاح</div>
+<div class="balance-amount">$<span id="withdrawableAmount">0.00</span></div>
+</div>
+</div>
+<div class="withdrawal-details">
+<div class="detail-item">
+<span class="detail-label">الحد الأدنى
+                                <button class="tooltip-trigger inline-small" data-tooltip="min-withdrawal">
+<i class="fas fa-info-circle"></i>
+</button>
+</span>
+<span class="detail-value">$<span id="minWithdrawal">0.10</span></span>
+</div>
+<div class="detail-item">
+<span class="detail-label">المعالجة</span>
+<span class="detail-value">فوري</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">الرسوم
+                                <button class="tooltip-trigger inline-small" data-tooltip="withdrawal-fees">
+<i class="fas fa-info-circle"></i>
+</button>
+</span>
+<span class="detail-value success">مجاناً</span>
+</div>
+</div>
+<button class="withdraw-action-btn" disabled="" id="withdrawBtn">
+<i class="fas fa-paper-plane"></i>
+<span>طلب السحب</span>
+</button>
+</div>
+<div class="withdrawal-history-section">
+<h3 class="section-title">سجل السحوبات</h3>
+<div class="history-items" id="withdrawalHistory">
+<p class="empty-message">لا توجد عمليات سحب سابقة</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Modern Bottom Navigation -->
+<nav class="modern-nav">
+<button class="nav-btn active" data-page="mining">
+<div class="nav-btn-icon"><i class="fas fa-mountain-sun"></i></div>
+<span class="nav-btn-text">التعدين</span>
+<div class="nav-btn-indicator"></div>
+</button>
+<button class="nav-btn" data-page="tasks">
+<div class="nav-btn-icon"><i class="fas fa-check-double"></i></div>
+<span class="nav-btn-text">المهام</span>
+<div class="nav-btn-indicator"></div>
+</button>
+<button class="nav-btn" data-page="tiers">
+<div class="nav-btn-icon"><i class="fas fa-star"></i></div>
+<span class="nav-btn-text">الباقات</span>
+<div class="nav-btn-indicator"></div>
+</button>
+<button class="nav-btn" data-page="withdrawal">
+<div class="nav-btn-icon"><i class="fas fa-wallet"></i></div>
+<span class="nav-btn-text">السحب</span>
+<div class="nav-btn-indicator"></div>
+</button>
+</nav>
+</div>
+<!-- Modal -->
+<div class="modern-modal" id="modal">
+<div class="modal-backdrop"></div>
+<div class="modal-container">
+<button class="modal-close-btn" id="modalClose">
+<i class="fas fa-times"></i>
+</button>
+<div class="modal-content-area" id="modalBody"></div>
+</div>
+</div>
+<!-- Tooltip Overlay -->
+<div class="tooltip-overlay" id="tooltipOverlay">
+<div class="tooltip-container">
+<button class="tooltip-close" id="tooltipClose">
+<i class="fas fa-times"></i>
+</button>
+<div class="tooltip-icon-container">
+<i class="fas fa-info-circle"></i>
+</div>
+<h3 class="tooltip-title" id="tooltipTitle">عنوان التلميح</h3>
+<p class="tooltip-content" id="tooltipContent">محتوى التلميح</p>
+</div>
+</div>
+<!-- CRYPTO SWAP POPUP - Copy this entire code to your website -->
+<!-- Popup HTML -->
+<div class="crypto-popup-overlay" id="cryptoPopup" style="display: none;">
+<div class="crypto-popup-box">
+<button class="crypto-close-btn" onclick="closeCryptoPopup()">×</button>
+<div class="crypto-icon">💰</div>
+<h2 class="crypto-title">حوّل USDT واستلم فلوسك</h2>
+<p class="crypto-text">نحوّل لك العملات الرقمية لعملة بلدك المحلية<br/>سريع • آمن • سهل</p>
+<a class="crypto-btn" href="https://arabs4wap.netlify.app" onclick="closeCryptoPopup()" target="_blank">ابدأ الآن ←</a>
+</div>
+</div>
+<!-- Popup Styles -->
+<style>
+  .crypto-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    padding: 20px;
+    font-family: 'Cairo', Arial, sans-serif;
+    direction: rtl;
+  }
+  
+  .crypto-popup-box {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    padding: 35px 30px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    animation: popupSlide 0.3s ease-out;
+  }
+  
+  @keyframes popupSlide {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .crypto-close-btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #f0f0f0;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    color: #666;
+    line-height: 1;
+    transition: all 0.2s;
+  }
+  
+  .crypto-close-btn:hover {
+    background: #e0e0e0;
+    transform: rotate(90deg);
+  }
+  
+  .crypto-icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+  }
+  
+  .crypto-title {
+    color: #1a1a1a;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0 0 12px 0;
+  }
+  
+  .crypto-text {
+    color: #666;
+    font-size: 15px;
+    margin: 0 0 25px 0;
+    line-height: 1.7;
+  }
+  
+  .crypto-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 15px 35px;
+    border-radius: 12px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  }
+  
+  .crypto-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  }
+  
+  @media (max-width: 480px) {
+    .crypto-popup-box { 
+      padding: 28px 20px;
+      margin: 15px;
+    }
+    .crypto-title { font-size: 20px; }
+    .crypto-text { font-size: 14px; }
+    .crypto-btn { padding: 13px 28px; font-size: 15px; }
+  }
+</style>
+<!-- Popup JavaScript -->
+<script>
+  // Show popup function
+  function showCryptoPopup() {
+    document.getElementById('cryptoPopup').style.display = 'flex';
+  }
+  
+  // Close popup function
+  function closeCryptoPopup() {
+    document.getElementById('cryptoPopup').style.display = 'none';
+  }
+  
+  // Close when clicking outside
+  document.getElementById('cryptoPopup').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeCryptoPopup();
+    }
+  });
+  
+  // Close with ESC key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeCryptoPopup();
+    }
+  });
+  
+  // AUTO-SHOW OPTIONS (choose one):
+  
+  // Option 1: Show immediately on page load
+  window.addEventListener('load', function() {
+    showCryptoPopup();
+  });
+  
+  // Option 2: Show after delay (e.g., 3 seconds)
+  // window.addEventListener('load', function() {
+  //   setTimeout(showCryptoPopup, 3000);
+  // });
+  
+  // Option 3: Show on scroll (when user scrolls 50%)
+  // window.addEventListener('scroll', function() {
+  //   var scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  //   if (scrollPercent > 50) {
+  //     showCryptoPopup();
+  //     window.removeEventListener('scroll', arguments.callee);
+  //   }
+  // });
+  
+  // Option 4: Show on exit intent (when mouse leaves page)
+  // document.addEventListener('mouseout', function(e) {
+  //   if (e.clientY < 0) {
+  //     showCryptoPopup();
+  //     document.removeEventListener('mouseout', arguments.callee);
+  //   }
+  // });
+  
+  // Option 5: Manual trigger - call showCryptoPopup() from a button
+  // <button onclick="showCryptoPopup()">Show Offer</button>
+</script>
+<!-- 
+  INTEGRATION INSTRUCTIONS:
+  
+  1. Copy this ENTIRE code block
+  2. Paste it anywhere in your HTML (before </body> tag is best)
+  3. Choose your preferred auto-show option in the JavaScript section
+  4. Change the link URL if needed (line 10)
+  5. Done! The popup will work on any website
+  
+  CUSTOMIZE:
+  - Change colors in .crypto-btn gradient
+  - Change text content
+  - Adjust timing in JavaScript options
+-->
+</body>
+</html>
