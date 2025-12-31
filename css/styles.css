@@ -1038,7 +1038,7 @@ body {
 }
 
 .reset-suggestions li::before {
-    content: 'â ';
+    content: '✓ ';
     color: #43e97b;
     font-weight: 700;
     margin-left: var(--space-sm);
@@ -1135,7 +1135,7 @@ body {
 }
 
 .tier-social-proof::before {
-    content: 'ð¥ ';
+    content: '👥 ';
 }
 
 .tier-features {
@@ -1153,7 +1153,7 @@ body {
 }
 
 .tier-feature::before {
-    content: "â";
+    content: "✓";
     color: #43e97b;
     font-weight: 700;
     font-size: var(--font-md);
